@@ -18,8 +18,8 @@ void Rows(int [][COLUMNS], int cont);
 void Columns(int [][COLUMNS], int f, int number, int cont);
 void ShowRows(int matrix[][COLUMNS], int f, int c);
 void ShowColumns(int matrix[][COLUMNS], int f, int c);
-void RandomRows(int matrix[][COLUMNS], int f, int c, int cont);
-void RandomColumns(int matrix[][COLUMNS], int f, int c, int n, int cont);
+void RandomRows(int matrix[][COLUMNS], int cont);
+void RandomColumns(int matrix[][COLUMNS], int f, int n, int cont);
 
 
 int main(){
@@ -35,8 +35,9 @@ int main(){
 	// Imprimimos Matriz
 	ShowRows(matrix, 0, 0);	
 
+	printf("Agregando numeros aleatorios\n");
 	// Insertar numeros Aleatorios
-	RandomRows(matrix, 0, 0, cont);
+	RandomRows(matrix, cont);
 
 	// Imprimimos matriz con numeros aleatorios
 	ShowRows(matrix, 0, 0);
@@ -47,18 +48,24 @@ int main(){
 int Random(){
 	return rand()%50+1;
 }
-void Rows(int matrix[][COLUMNS], int cont){
-	int n = Random();
-	if(cont < (ROWS*COLUMNS-10)){
-		int f = rand()%ROWS+1;
-		Columns(matrix, f, n, cont);	
+void Rows(int matrix[][COLUMNS], int cont) {
+	// Llenamos la matriz hasta que falten 10 espacios
+	if (cont < (ROWS * COLUMNS - 10)) {
+		int n = Random();
+		int f = rand() % ROWS;
+		Columns(matrix, f, n, cont);
 	}
 }
-void Columns(int matrix[][COLUMNS], int f, int number, int cont){
-	int c = rand()%COLUMNS+1;
-	matrix[f][c] = number;
-	cont++;
-	Rows(matrix, cont);
+void Columns(int matrix[][COLUMNS], int f, int number, int cont) {
+	int c = rand() % COLUMNS;
+	// Verificamos si la posición está libre
+	if (matrix[f][c] == 0) {
+		matrix[f][c] = number;
+		printf("Agregado [%d,%d] con el numero %d\n", f, c, number);
+		// Solo incrementamos si se lleno una posicion
+		cont++;
+	}
+	Rows(matrix, cont); // llamada recursiva
 }
 void ShowRows(int matrix[][COLUMNS], int f, int c){
 	if(f < ROWS){
@@ -67,7 +74,7 @@ void ShowRows(int matrix[][COLUMNS], int f, int c){
 			f++;
 			c = 0;
 		}	
-		ShowColumns(matrix, f, c);
+		ShowColumns(matrix, f, c); // Recursividad Indirecta
 	}
 }
 void ShowColumns(int matrix[][COLUMNS], int f, int c){
@@ -77,27 +84,19 @@ void ShowColumns(int matrix[][COLUMNS], int f, int c){
 	}
 	ShowRows(matrix, f, c);
 }
-void RandomRows(int matrix[][COLUMNS], int f, int c, int cont){
-	while(cont < 10){
+void RandomRows(int matrix[][COLUMNS], int cont){
+	// Llenamos los 10 espacios restantes
+	if(cont < 10){
+		int f = rand()%ROWS;
 		int n = Random();
-		if(f < ROWS && cont < (ROWS*COLUMNS-10)){
-			if(c == COLUMNS){
-				f++;
-				c = 0;
-			}
-			RandomColumns(matrix, f, c, n, cont);	
-		}	
+		RandomColumns(matrix, f, n, cont);	// Recursividad Indirecta
 	}
 }
-void RandomColumns(int matrix[][COLUMNS], int f, int c, int n, int cont){
-	if(f < ROWS){
-		if(c == COLUMNS){
-			printf("\n");
-			f++;
-			c = 0;
-		}	
+void RandomColumns(int matrix[][COLUMNS], int f, int number, int cont){
+	int c = rand()%COLUMNS;
+	if(matrix[f][c] == 0){
+		matrix[f][c] = number;
 		cont++;
-		RandomRows(matrix, f, c, cont);
-	}
+	}	
+	RandomRows(matrix, cont);
 }
-
