@@ -14,10 +14,10 @@
 
 // Prototipos
 int Random();
-void Rows(int [][COLUMNS], int f, int c, int cont);
-void Columns(int [][COLUMNS], int f, int c, int n, int cont);
-void ShowRows();
-void ShowColumns();
+void Rows(int [][COLUMNS], int cont);
+void Columns(int [][COLUMNS], int f, int number, int cont);
+void ShowRows(int matrix[][COLUMNS], int f, int c);
+void ShowColumns(int matrix[][COLUMNS], int f, int c);
 void RandomRows(int matrix[][COLUMNS], int f, int c, int cont);
 void RandomColumns(int matrix[][COLUMNS], int f, int c, int n, int cont);
 
@@ -30,7 +30,7 @@ int main(){
 	int matrix[ROWS][COLUMNS] = {0};
 	int cont = 0;
 	// Comenzamos recursividad
-	Rows(matrix, 0, 0, cont);
+	Rows(matrix, cont);
 
 	// Imprimimos Matriz
 	ShowRows(matrix, 0, 0);	
@@ -47,24 +47,18 @@ int main(){
 int Random(){
 	return rand()%50+1;
 }
-void Rows(int matrix[][COLUMNS], int f, int c, int cont){
-	int n = 1;
-	if(f < ROWS && cont < (ROWS*COLUMNS-10)){
-		if(c == COLUMNS){
-			f++;
-			c = 0;
-		}
-		Columns(matrix, f, c, n, cont);	
+void Rows(int matrix[][COLUMNS], int cont){
+	int n = Random();
+	if(cont < (ROWS*COLUMNS-10)){
+		int f = rand()%ROWS+1;
+		Columns(matrix, f, n, cont);	
 	}
-	
 }
-void Columns(int matrix[][COLUMNS], int f, int c, int n, int cont){
-	if(c < COLUMNS && f != ROWS){
-		matrix[f][c] = n;
-		c++;
-		cont++;
-	}
-	Rows(matrix, f, c, cont);
+void Columns(int matrix[][COLUMNS], int f, int number, int cont){
+	int c = rand()%COLUMNS+1;
+	matrix[f][c] = number;
+	cont++;
+	Rows(matrix, cont);
 }
 void ShowRows(int matrix[][COLUMNS], int f, int c){
 	if(f < ROWS){
