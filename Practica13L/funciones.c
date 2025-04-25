@@ -126,5 +126,3 @@ void ClearBuffer(){
     char c;
     while ((c = getchar()) != '\n' && c != EOF) {} // Limpiar buffer de entrada
 }
-
-
