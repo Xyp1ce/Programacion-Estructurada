@@ -5,57 +5,44 @@
 */
 
 #include <stdio.h>
-//#include "funciones.h"
+#include "funciones.h"
 
 // CONSTANTES
-#define USERS 2
+#define USERS 5
 #define COLUMNS 4
 #define MAX 256	
 
-// PROTOTIPOS
-void ClearBuffer();
-void GetName(char *name);
-void GetTickets(int *tickets);
-
 int main(void){
 	// Declaracion e Inicializacino de variables
-	char users[USERS]; // [0][1]
+	char users[USERS][MAX]; // [0][1]
 	int data[USERS][COLUMNS];
 	int totalPerUser[USERS];
-	int total[3];
+	int total[3] = {0}; 
 
 	for(int i = 0; i < USERS; i++){
-		GetName(&users[i]);
+		GetName(&users[i][0], MAX);
 		for(int j = 0; j < COLUMNS; j++){
 			switch(j){
 				case 0: // Tickets
 					GetTickets(&data[i][j]);
 					break;
+				case 1: // Palomitas
+					GetProduct(&data[i][j], j);
+					break;
+				case 2: // Refresco
+					GetProduct(&data[i][j], j);
+					break;
+				case 3: // Nachos
+					GetProduct(&data[i][j], j);
+					break;
+				default:
+					break;
 			}
 		}
 	}
+	GetTotalPerUser(totalPerUser, &data[0][0], USERS, COLUMNS);
+	GetTotal(&total[0], &data[0][0], USERS, COLUMNS); // Total de boletos y dulceria
+	ShowInfo(&users[0][0], totalPerUser, &data[0][0], total, USERS, COLUMNS, MAX); // Mostrar info de cada cliente
 	return 0;
 }
 
-// PROCEDIMIENTOS
-void GetName(char *name){
-	printf("Nombre del cliente\n>> ");
-	fgets(name, MAX, stdin);
-	int i = 0;
-    	while (name[i] != '\0') {
-        	if (name[i] == '\n') {
-            		name[i] = '\0';
-            		break;
-        	}
-        	i++;
-	}
-}
-void GetTickets(int *tickets){
-	printf("Que boleto desea comprar? [1] General [2] Estudiante [3] Tercera Edad\n>> ");
-	scanf("%d", &tickets);
-	ClearBuffer();
-}
-void ClearBuffer(){
-    char c;
-    while ((c = getchar()) != '\n' && c != EOF) {} // Limpiar buffer de entrada
-}
