@@ -32,7 +32,7 @@ void Center(int matrix[][COLM], int row, int col){
     int pasos = 1;
     int valor = 1;
 
-    matrix[x][y] = valor++;
+    matrix[y][x] = valor++;
 
     while (valor <= row * col) {
         for (int i = 0; i < 2; i++) {
@@ -40,7 +40,7 @@ void Center(int matrix[][COLM], int row, int col){
                 x += dx[dir];
                 y += dy[dir];
                 if (x >= 0 && x < row && y >= 0 && y < col) {
-                    matrix[x][y] = valor++;
+                    matrix[y][x] = valor++;
                 }
             }
             dir = (dir + 1) % 4;
